@@ -21,7 +21,7 @@ bot.on('message', async event => {
     const url = `https://dict.longdo.com/mobile.php?search=${text}`
     const encode = encodeURI(url)
     let $ = ''
-    const domain = 'https://65bbec47e640.ngrok.io'
+    const domain = 'https://askmeaboutexhibition.herokuapp.com/'
     
     // const news = ''
     const updateData = async () => {
@@ -137,7 +137,7 @@ bot.on('message', async event => {
           }
         },{
           type: 'audio',
-          originalContentUrl: 'https://65bbec47e640.ngrok.io/text.m4a',
+          originalContentUrl: `${domain}text.m4a`,
           duration: 500
         }]
       // reply = (result.length === 0) ? '嗨嗨' : reply
