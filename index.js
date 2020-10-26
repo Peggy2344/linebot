@@ -4,6 +4,7 @@ import linebot from 'linebot'
 import dotenv from 'dotenv'
 import axios from 'axios'
 import cheerio from 'cheerio'
+import gTTS from 'gtts'
 
 // 讀取 .env
 dotenv.config()
@@ -20,25 +21,139 @@ bot.on('message', async event => {
     const url = `https://dict.longdo.com/mobile.php?search=${text}`
     const encode = encodeURI(url)
     let $ = ''
+    const domain = 'https://c693a5d05020.ngrok.io'
+    const gtts = gTTS(`${text}, 'th'`)
+    gtts.save('./text.m4a')
+    // const news = ''
     const updateData = async () => {
       const response = await axios.get(encode)
       $ = cheerio.load(response.data)
-      let reply = ''
-      const result = $('b').filter(function (i, el) {
-        return $(el).text() === 'NECTEC Lexitron-2 Dictionary (TH-EN)'
-      }).next().find('tbody tr td').eq(1).children().remove('a').end().text().split('')
-      const translate = result.slice(0, result.indexOf(',')).join('')
-      const example = result.slice(result.lastIndexOf('E'), result.lastIndexOf('T')).join('')
-      const thaiDef = result.slice(result.lastIndexOf('T')).join('')
-      reply = `${translate}
-      ${example}
-      ${thaiDef}`
-      reply = (reply.length === 0) ? '嗨嗨' : reply
+      let reply
+      const result = []
+      for (let i = 1; i <= 5; i += 2) {
+        const word = $('b').filter(function (i, el) {
+          return $(el).text() === 'NECTEC Lexitron-2 Dictionary (TH-EN)'
+        }).next().find('tbody tr td').eq(i).children().remove('a').end().text().split('')
+        const translate = word.slice(0, word.indexOf(',')).join('')
+        let example = ''
+        if (word.lastIndexOf('T') === -1) {
+          example = word.slice(word.lastIndexOf('E') + 9).join('')
+        } else {
+          example = word.slice(word.lastIndexOf('E') + 9, word.lastIndexOf('T')).join('')
+        }
+        if (!(word.length === 0)) {
+          result.push({ translate: translate, example: example })
+        }
+      }
+      result.length === 0 ? reply = '沒有這個單字的資料，請搜尋其他單詞~'
+        : reply = {
+          type: 'flex',
+          altText: 'Flex',
+          contents: {
+            type: 'carousel',
+            contents: [
+              {
+                type: 'bubble',
+                header: {
+                  type: 'box',
+                  layout: 'vertical',
+                  contents: [{
+                    type: 'text',
+                    wrap: true,
+                    text: result[0].translate
+                  }]
+                },
+                body: {
+                  type: 'box',
+                  layout: 'vertical',
+                  contents: [{
+                    type: 'text',
+                    wrap: true,
+                    text: result[0].example
+                  }]
+                },
+                styles: {
+                  header: {
+                    backgroundColor: '#83c5be'
+                  }
+                }
+              },
+              {
+                type: 'bubble',
+                header: {
+                  type: 'box',
+                  layout: 'vertical',
+                  contents: [{
+                    type: 'text',
+                    wrap: true,
+                    text: result[1].translate
+                  }]
+                },
+                body: {
+                  type: 'box',
+                  layout: 'vertical',
+                  contents: [{
+                    type: 'text',
+                    wrap: true,
+                    text: result[1].example
+                  }]
+                },
+                styles: {
+                  header: {
+                    backgroundColor: '#83c5be'
+                  }
+                }
+              }, {
+                type: 'bubble',
+                header: {
+                  type: 'box',
+                  layout: 'vertical',
+                  contents: [{
+                    type: 'text',
+                    wrap: true,
+                    text: result[2].translate
+                  }]
+                },
+                body: {
+                  type: 'box',
+                  layout: 'vertical',
+                  contents: [{
+                    type: 'text',
+                    wrap: true,
+                    text: result[2].example
+                  }]
+                },
+                styles: {
+                  header: {
+                    backgroundColor: '#83c5be'
+                  }
+                }
+              }, {
+                type: 'carousel',
+                contents: [
+                  {
+                    type: 'bubble',
+                    body: {
+                      type: 'box',
+                      layout: 'vertical',
+                      contents: [{
+                        type: 'audio',
+                        originalContentUrl: `${domain}/text.m4a`
+                      }]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      // reply = (result.length === 0) ? '嗨嗨' : reply
       event.reply(reply)
     }
     updateData()
   } catch (error) {
     event.reply('發生錯誤')
+    console.log(error)
   }
 })
 
