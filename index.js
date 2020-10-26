@@ -6,6 +6,7 @@ import axios from 'axios'
 import cheerio from 'cheerio'
 import gtts from 'gtts'
 
+
 // 讀取 .env
 dotenv.config()
 // 設定機器人
@@ -21,15 +22,10 @@ bot.on('message', async event => {
     const url = `https://dict.longdo.com/mobile.php?search=${text}`
     const encode = encodeURI(url)
     let $ = ''
-    const domain = 'https://askmeaboutexhibition.herokuapp.com/'
+    // const domain = 'https://e995059dd1d7.ngrok.io'
     
     // const news = ''
     const updateData = async () => {
-      const gTTS = new gtts(`${text}`, 'th')
-        gTTS.save('./text.m4a',function(err,result){
-          if(err) {throw new Error(err)}
-          console.log('Success');
-        })
       const response = await axios.get(encode)
       $ = cheerio.load(response.data)
       let reply
@@ -137,7 +133,7 @@ bot.on('message', async event => {
           }
         },{
           type: 'audio',
-          originalContentUrl: `${domain}text.m4a`,
+          originalContentUrl: `https://translate.google.com/translate_tts?ie=UTF-8&tl=th&client=tw-ob&q=${text}`,
           duration: 500
         }]
       // reply = (result.length === 0) ? '嗨嗨' : reply
