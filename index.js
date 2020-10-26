@@ -4,7 +4,7 @@ import linebot from 'linebot'
 import dotenv from 'dotenv'
 import axios from 'axios'
 import cheerio from 'cheerio'
-import gTTS from 'gtts'
+import gtts from 'gtts'
 
 // 讀取 .env
 dotenv.config()
@@ -21,11 +21,15 @@ bot.on('message', async event => {
     const url = `https://dict.longdo.com/mobile.php?search=${text}`
     const encode = encodeURI(url)
     let $ = ''
-    const domain = 'https://c693a5d05020.ngrok.io'
-    const gtts = gTTS(`${text}, 'th'`)
-    gtts.save('./text.m4a')
+    const domain = 'https://65bbec47e640.ngrok.io'
+    
     // const news = ''
     const updateData = async () => {
+      const gTTS = new gtts(`${text}`, 'th')
+        gTTS.save('./text.m4a',function(err,result){
+          if(err) {throw new Error(err)}
+          console.log('Success');
+        })
       const response = await axios.get(encode)
       $ = cheerio.load(response.data)
       let reply
@@ -46,7 +50,7 @@ bot.on('message', async event => {
         }
       }
       result.length === 0 ? reply = '沒有這個單字的資料，請搜尋其他單詞~'
-        : reply = {
+        : reply = [{
           type: 'flex',
           altText: 'Flex',
           contents: {
@@ -128,25 +132,14 @@ bot.on('message', async event => {
                     backgroundColor: '#83c5be'
                   }
                 }
-              }, {
-                type: 'carousel',
-                contents: [
-                  {
-                    type: 'bubble',
-                    body: {
-                      type: 'box',
-                      layout: 'vertical',
-                      contents: [{
-                        type: 'audio',
-                        originalContentUrl: `${domain}/text.m4a`
-                      }]
-                    }
-                  }
-                ]
-              }
+              }, 
             ]
           }
-        }
+        },{
+          type: 'audio',
+          originalContentUrl: 'https://65bbec47e640.ngrok.io/text.m4a',
+          duration: 500
+        }]
       // reply = (result.length === 0) ? '嗨嗨' : reply
       event.reply(reply)
     }
