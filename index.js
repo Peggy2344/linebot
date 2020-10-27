@@ -4,7 +4,7 @@ import linebot from 'linebot'
 import dotenv from 'dotenv'
 import axios from 'axios'
 import cheerio from 'cheerio'
-import gTTS from 'gtts'
+import googleTTS from 'google-tts-api'
 
 // 讀取 .env
 dotenv.config()
@@ -21,11 +21,15 @@ bot.on('message', async event => {
     const url = `https://dict.longdo.com/mobile.php?search=${text}`
     const encode = encodeURI(url)
     let $ = ''
-    const domain = 'https://c693a5d05020.ngrok.io'
-    const gtts = gTTS(`${text}, 'th'`)
-    gtts.save('./text.m4a')
     // const news = ''
     const updateData = async () => {
+      let soundurl = ''
+      await googleTTS(`${text}`, 'th', 1).then(function (url) {
+        soundurl = url
+        console.log(soundurl)
+      }).catch(function (err) {
+        console.log(err)
+      })
       const response = await axios.get(encode)
       $ = cheerio.load(response.data)
       let reply
@@ -138,7 +142,8 @@ bot.on('message', async event => {
                       layout: 'vertical',
                       contents: [{
                         type: 'audio',
-                        originalContentUrl: `${domain}/text.m4a`
+                        originalContentUrl: soundurl,
+                        duration: 1000
                       }]
                     }
                   }
