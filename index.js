@@ -6,6 +6,7 @@ import axios from 'axios'
 import cheerio from 'cheerio'
 import googleTTS from 'google-tts-api'
 
+
 // 讀取 .env
 dotenv.config()
 // 設定機器人
@@ -50,7 +51,7 @@ bot.on('message', async event => {
         }
       }
       result.length === 0 ? reply = '沒有這個單字的資料，請搜尋其他單詞~'
-        : reply = {
+        : reply = [{
           type: 'flex',
           altText: 'Flex',
           contents: {
@@ -151,7 +152,11 @@ bot.on('message', async event => {
               }
             ]
           }
-        }
+        }, {
+          type: 'audio',
+          originalContentUrl: `https://translate.google.com/translate_tts?ie=UTF-8&tl=th&client=tw-ob&q=${text}`,
+          duration: 500
+        }]
       // reply = (result.length === 0) ? '嗨嗨' : reply
       event.reply(reply)
     }
