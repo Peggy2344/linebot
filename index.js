@@ -6,6 +6,7 @@ import axios from 'axios'
 import cheerio from 'cheerio'
 // import googleTTS from 'google-tts-api'
 import Gtts from 'gtts'
+// import express from 'express'
 // import ffmpeg from 'fluent-ffmpeg'
 
 // 讀取 .env
@@ -29,7 +30,14 @@ bot.on('message', async event => {
       tts.save('./text.m4a', function (err, result) {
         if (err) { throw new Error(err) }
         console.log('Success! Open file to hear result.')
+        console.log(result)
       })
+      // const app = express()
+      // app.get('./', function (req, res) {
+      //   const gtts = new Gtts(`${text}`, 'th')
+      //   gtts.stream().pipe(res)
+      //   console.log(res)
+      // })
       const response = await axios.get(encode)
       $ = cheerio.load(response.data)
       let reply
