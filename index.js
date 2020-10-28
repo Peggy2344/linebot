@@ -4,8 +4,9 @@ import linebot from 'linebot'
 import dotenv from 'dotenv'
 import axios from 'axios'
 import cheerio from 'cheerio'
-import googleTTS from 'google-tts-api'
-
+// import googleTTS from 'google-tts-api'
+import Gtts from 'gtts'
+// import ffmpeg from 'fluent-ffmpeg'
 
 // 讀取 .env
 dotenv.config()
@@ -24,12 +25,10 @@ bot.on('message', async event => {
     let $ = ''
     // const news = ''
     const updateData = async () => {
-      let soundurl = ''
-      await googleTTS(`${text}`, 'th', 1).then(function (url) {
-        soundurl = url
-        console.log(soundurl)
-      }).catch(function (err) {
-        console.log(err)
+      const tts = new Gtts(`${text}`, 'th')
+      tts.save('./text.m4a', function (err, result) {
+        if (err) { throw new Error(err) }
+        console.log('Success! Open file to hear result.')
       })
       const response = await axios.get(encode)
       $ = cheerio.load(response.data)
@@ -133,29 +132,13 @@ bot.on('message', async event => {
                     backgroundColor: '#83c5be'
                   }
                 }
-              }, {
-                type: 'carousel',
-                contents: [
-                  {
-                    type: 'bubble',
-                    body: {
-                      type: 'box',
-                      layout: 'vertical',
-                      contents: [{
-                        type: 'audio',
-                        originalContentUrl: soundurl,
-                        duration: 1000
-                      }]
-                    }
-                  }
-                ]
               }
             ]
           }
         }, {
           type: 'audio',
-          originalContentUrl: `https://translate.google.com/translate_tts?ie=UTF-8&tl=th&client=tw-ob&q=${text}`,
-          duration: 500
+          originalContentUrl: 'https://9e9f1be81d29.ngrok.io/text.m4a',
+          duration: 1000
         }]
       // reply = (result.length === 0) ? '嗨嗨' : reply
       event.reply(reply)
