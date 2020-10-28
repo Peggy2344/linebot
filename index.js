@@ -19,301 +19,306 @@ const bot = linebot({
 })
 
 const updateNews = async (catagory, event) => {
-  const response = await axios.get(`https://newsapi.org/v2/top-headlines?country=th&category=${catagory}&apiKey=3e750ac7043b4a359c9cab5ad99e81c3`)
-  const articles = response.data.articles
-  let reply = ''
-  const imgUrl = 'https://images.pexels.com/photos/3944377/pexels-photo-3944377.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260'
-  const img1 = articles[0].urlToImage === null ? imgUrl : articles[0].urlToImage
-  const img2 = articles[1].urlToImage === null ? imgUrl : articles[1].urlToImage
-  const img3 = articles[2].urlToImage === null ? imgUrl : articles[2].urlToImage
-  reply = {
-    type: 'flex',
-    altText: 'Flex',
-    contents: {
-      type: 'carousel',
-      contents: [
-        {
-          type: 'bubble',
-          body: {
-            type: 'box',
-            layout: 'vertical',
-            contents: [
-              {
-                type: 'image',
-                url: img1,
-                size: 'full',
-                aspectMode: 'cover',
-                aspectRatio: '2:3',
-                gravity: 'top'
-              },
-              {
-                type: 'box',
-                layout: 'vertical',
-                contents: [
-                  {
-                    type: 'box',
-                    layout: 'vertical',
-                    contents: [
-                      {
-                        type: 'text',
-                        text: articles[0].title,
-                        wrap: true,
-                        size: 'xl',
-                        color: '#ffffff',
-                        weight: 'bold'
+  try {
+    const apiKey = process.env.NEWSAPI
+    const response = await axios.get(`https://newsapi.org/v2/top-headlines?country=th&category=${catagory}&apiKey=${apiKey}`)
+    const articles = response.data.articles
+    let reply = ''
+    const imgUrl = 'https://images.pexels.com/photos/3944377/pexels-photo-3944377.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260'
+    const img1 = articles[0].urlToImage === null ? imgUrl : encodeURI(articles[0].urlToImage)
+    const img2 = articles[1].urlToImage === null ? imgUrl : encodeURI(articles[1].urlToImage)
+    const img3 = articles[2].urlToImage === null ? imgUrl : encodeURI(articles[2].urlToImage)
+    reply = {
+      type: 'flex',
+      altText: 'Flex',
+      contents: {
+        type: 'carousel',
+        contents: [
+          {
+            type: 'bubble',
+            body: {
+              type: 'box',
+              layout: 'vertical',
+              contents: [
+                {
+                  type: 'image',
+                  url: img1,
+                  size: 'full',
+                  aspectMode: 'cover',
+                  aspectRatio: '2:3',
+                  gravity: 'top'
+                },
+                {
+                  type: 'box',
+                  layout: 'vertical',
+                  contents: [
+                    {
+                      type: 'box',
+                      layout: 'vertical',
+                      contents: [
+                        {
+                          type: 'text',
+                          text: articles[0].title,
+                          wrap: true,
+                          size: 'xl',
+                          color: '#ffffff',
+                          weight: 'bold'
+                        }
+                      ]
+                    },
+                    {
+                      type: 'box',
+                      layout: 'vertical',
+                      contents: [
+                        {
+                          type: 'filler'
+                        },
+                        {
+                          type: 'box',
+                          layout: 'baseline',
+                          contents: [
+                            {
+                              type: 'filler'
+                            },
+                            {
+                              type: 'text',
+                              text: '查看新聞',
+                              color: '#ffffff',
+                              flex: 0,
+                              offsetTop: '-2px',
+                              contents: [
+                                {
+                                  type: 'span',
+                                  text: '查看新聞'
+                                }
+                              ]
+                            },
+                            {
+                              type: 'filler'
+                            }
+                          ],
+                          spacing: 'sm'
+                        },
+                        {
+                          type: 'filler'
+                        }
+                      ],
+                      borderWidth: '1px',
+                      cornerRadius: '4px',
+                      spacing: 'sm',
+                      borderColor: '#ffffff',
+                      margin: 'xxl',
+                      height: '40px',
+                      offsetTop: '20px',
+                      action: {
+                        type: 'uri',
+                        label: 'action',
+                        uri: encodeURI(articles[0].url)
                       }
-                    ]
-                  },
-                  {
-                    type: 'box',
-                    layout: 'vertical',
-                    contents: [
-                      {
-                        type: 'filler'
-                      },
-                      {
-                        type: 'box',
-                        layout: 'baseline',
-                        contents: [
-                          {
-                            type: 'filler'
-                          },
-                          {
-                            type: 'text',
-                            text: '查看新聞',
-                            color: '#ffffff',
-                            flex: 0,
-                            offsetTop: '-2px',
-                            contents: [
-                              {
-                                type: 'span',
-                                text: '查看新聞'
-                              }
-                            ]
-                          },
-                          {
-                            type: 'filler'
-                          }
-                        ],
-                        spacing: 'sm'
-                      },
-                      {
-                        type: 'filler'
-                      }
-                    ],
-                    borderWidth: '1px',
-                    cornerRadius: '4px',
-                    spacing: 'sm',
-                    borderColor: '#ffffff',
-                    margin: 'xxl',
-                    height: '40px',
-                    offsetTop: '20px',
-                    action: {
-                      type: 'uri',
-                      label: 'action',
-                      uri: articles[0].url
                     }
-                  }
-                ],
-                position: 'absolute',
-                offsetBottom: '0px',
-                offsetStart: '0px',
-                offsetEnd: '0px',
-                backgroundColor: '#03303Acc',
-                paddingAll: '40px',
-                paddingTop: '40px'
-              }
-            ],
-            paddingAll: '0px'
-          }
-        },
-        {
-          type: 'bubble',
-          body: {
-            type: 'box',
-            layout: 'vertical',
-            contents: [
-              {
-                type: 'image',
-                url: img2,
-                size: 'full',
-                aspectMode: 'cover',
-                aspectRatio: '2:3',
-                gravity: 'top'
-              },
-              {
-                type: 'box',
-                layout: 'vertical',
-                contents: [
-                  {
-                    type: 'box',
-                    layout: 'vertical',
-                    contents: [
-                      {
-                        type: 'text',
-                        text: articles[1].title,
-                        wrap: true,
-                        size: 'xl',
-                        color: '#ffffff',
-                        weight: 'bold'
+                  ],
+                  position: 'absolute',
+                  offsetBottom: '0px',
+                  offsetStart: '0px',
+                  offsetEnd: '0px',
+                  backgroundColor: '#03303Acc',
+                  paddingAll: '40px',
+                  paddingTop: '40px'
+                }
+              ],
+              paddingAll: '0px'
+            }
+          },
+          {
+            type: 'bubble',
+            body: {
+              type: 'box',
+              layout: 'vertical',
+              contents: [
+                {
+                  type: 'image',
+                  url: img2,
+                  size: 'full',
+                  aspectMode: 'cover',
+                  aspectRatio: '2:3',
+                  gravity: 'top'
+                },
+                {
+                  type: 'box',
+                  layout: 'vertical',
+                  contents: [
+                    {
+                      type: 'box',
+                      layout: 'vertical',
+                      contents: [
+                        {
+                          type: 'text',
+                          text: articles[1].title,
+                          wrap: true,
+                          size: 'xl',
+                          color: '#ffffff',
+                          weight: 'bold'
+                        }
+                      ]
+                    },
+                    {
+                      type: 'box',
+                      layout: 'vertical',
+                      contents: [
+                        {
+                          type: 'filler'
+                        },
+                        {
+                          type: 'box',
+                          layout: 'baseline',
+                          contents: [
+                            {
+                              type: 'filler'
+                            },
+                            {
+                              type: 'text',
+                              text: '查看新聞',
+                              color: '#ffffff',
+                              flex: 0,
+                              offsetTop: '-2px'
+                            },
+                            {
+                              type: 'filler'
+                            }
+                          ],
+                          spacing: 'sm'
+                        },
+                        {
+                          type: 'filler'
+                        }
+                      ],
+                      borderWidth: '1px',
+                      cornerRadius: '4px',
+                      spacing: 'sm',
+                      borderColor: '#ffffff',
+                      margin: 'xxl',
+                      height: '40px',
+                      offsetTop: '20px',
+                      action: {
+                        type: 'uri',
+                        label: 'action',
+                        uri: encodeURI(articles[1].url)
                       }
-                    ]
-                  },
-                  {
-                    type: 'box',
-                    layout: 'vertical',
-                    contents: [
-                      {
-                        type: 'filler'
-                      },
-                      {
-                        type: 'box',
-                        layout: 'baseline',
-                        contents: [
-                          {
-                            type: 'filler'
-                          },
-                          {
-                            type: 'text',
-                            text: '查看新聞',
-                            color: '#ffffff',
-                            flex: 0,
-                            offsetTop: '-2px'
-                          },
-                          {
-                            type: 'filler'
-                          }
-                        ],
-                        spacing: 'sm'
-                      },
-                      {
-                        type: 'filler'
-                      }
-                    ],
-                    borderWidth: '1px',
-                    cornerRadius: '4px',
-                    spacing: 'sm',
-                    borderColor: '#ffffff',
-                    margin: 'xxl',
-                    height: '40px',
-                    offsetTop: '20px',
-                    action: {
-                      type: 'uri',
-                      label: 'action',
-                      uri: articles[1].url
                     }
-                  }
-                ],
-                position: 'absolute',
-                offsetBottom: '0px',
-                offsetStart: '0px',
-                offsetEnd: '0px',
-                backgroundColor: '#9C8E7Ecc',
-                paddingAll: '40px',
-                paddingTop: '40px'
-              }
-            ],
-            paddingAll: '0px'
-          }
-        }, {
-          type: 'bubble',
-          body: {
-            type: 'box',
-            layout: 'vertical',
-            contents: [
-              {
-                type: 'image',
-                url: img3,
-                size: 'full',
-                aspectMode: 'cover',
-                aspectRatio: '2:3',
-                gravity: 'top'
-              },
-              {
-                type: 'box',
-                layout: 'vertical',
-                contents: [
-                  {
-                    type: 'box',
-                    layout: 'vertical',
-                    contents: [
-                      {
-                        type: 'text',
-                        text: articles[2].title,
-                        wrap: true,
-                        size: 'xl',
-                        color: '#ffffff',
-                        weight: 'bold'
+                  ],
+                  position: 'absolute',
+                  offsetBottom: '0px',
+                  offsetStart: '0px',
+                  offsetEnd: '0px',
+                  backgroundColor: '#9C8E7Ecc',
+                  paddingAll: '40px',
+                  paddingTop: '40px'
+                }
+              ],
+              paddingAll: '0px'
+            }
+          }, {
+            type: 'bubble',
+            body: {
+              type: 'box',
+              layout: 'vertical',
+              contents: [
+                {
+                  type: 'image',
+                  url: img3,
+                  size: 'full',
+                  aspectMode: 'cover',
+                  aspectRatio: '2:3',
+                  gravity: 'top'
+                },
+                {
+                  type: 'box',
+                  layout: 'vertical',
+                  contents: [
+                    {
+                      type: 'box',
+                      layout: 'vertical',
+                      contents: [
+                        {
+                          type: 'text',
+                          text: articles[2].title,
+                          wrap: true,
+                          size: 'xl',
+                          color: '#ffffff',
+                          weight: 'bold'
+                        }
+                      ]
+                    },
+                    {
+                      type: 'box',
+                      layout: 'vertical',
+                      contents: [
+                        {
+                          type: 'filler'
+                        },
+                        {
+                          type: 'box',
+                          layout: 'baseline',
+                          contents: [
+                            {
+                              type: 'filler'
+                            },
+                            {
+                              type: 'text',
+                              text: '查看新聞',
+                              color: '#ffffff',
+                              flex: 0,
+                              offsetTop: '-2px',
+                              contents: [
+                                {
+                                  type: 'span',
+                                  text: '查看新聞'
+                                }
+                              ]
+                            },
+                            {
+                              type: 'filler'
+                            }
+                          ],
+                          spacing: 'sm'
+                        },
+                        {
+                          type: 'filler'
+                        }
+                      ],
+                      borderWidth: '1px',
+                      cornerRadius: '4px',
+                      spacing: 'sm',
+                      borderColor: '#ffffff',
+                      margin: 'xxl',
+                      height: '40px',
+                      offsetTop: '20px',
+                      action: {
+                        type: 'uri',
+                        label: 'action',
+                        uri: encodeURI(articles[2].url)
                       }
-                    ]
-                  },
-                  {
-                    type: 'box',
-                    layout: 'vertical',
-                    contents: [
-                      {
-                        type: 'filler'
-                      },
-                      {
-                        type: 'box',
-                        layout: 'baseline',
-                        contents: [
-                          {
-                            type: 'filler'
-                          },
-                          {
-                            type: 'text',
-                            text: '查看新聞',
-                            color: '#ffffff',
-                            flex: 0,
-                            offsetTop: '-2px',
-                            contents: [
-                              {
-                                type: 'span',
-                                text: '查看新聞'
-                              }
-                            ]
-                          },
-                          {
-                            type: 'filler'
-                          }
-                        ],
-                        spacing: 'sm'
-                      },
-                      {
-                        type: 'filler'
-                      }
-                    ],
-                    borderWidth: '1px',
-                    cornerRadius: '4px',
-                    spacing: 'sm',
-                    borderColor: '#ffffff',
-                    margin: 'xxl',
-                    height: '40px',
-                    offsetTop: '20px',
-                    action: {
-                      type: 'uri',
-                      label: 'action',
-                      uri: articles[2].url
                     }
-                  }
-                ],
-                position: 'absolute',
-                offsetBottom: '0px',
-                offsetStart: '0px',
-                offsetEnd: '0px',
-                backgroundColor: '#03303Acc',
-                paddingAll: '40px',
-                paddingTop: '40px'
-              }
-            ],
-            paddingAll: '0px'
+                  ],
+                  position: 'absolute',
+                  offsetBottom: '0px',
+                  offsetStart: '0px',
+                  offsetEnd: '0px',
+                  backgroundColor: '#03303Acc',
+                  paddingAll: '40px',
+                  paddingTop: '40px'
+                }
+              ],
+              paddingAll: '0px'
+            }
           }
-        }
-      ]
+        ]
+      }
     }
+    event.reply(reply)
+  } catch (error) {
+    console.log(error)
   }
-  event.reply(reply)
 }
 
 const updateData = async (dataUrl, event) => {
@@ -337,9 +342,7 @@ const updateData = async (dataUrl, event) => {
     const word = $('b').filter(function (i, el) {
       return $(el).text() === 'NECTEC Lexitron-2 Dictionary (TH-EN)'
     }).next().find('tbody tr td').eq(i).children().remove('a').end().text().split('')
-    console.log(word)
     const translate = word.length > 0 ? word.slice(0, word.indexOf(',')).join('') : 'no results'
-    console.log(translate)
     let example = ''
     if (word.lastIndexOf('T') === -1) {
       example = word.length > 0 ? word.slice(word.lastIndexOf('E') + 9).join('') : 'no results'
@@ -447,15 +450,15 @@ bot.on('message', async event => {
         reply = '請輸入查詢新聞種類(商業、娛樂、健康、頭條、運動、科技)'
         event.reply(reply)
         break
-      case '商業': updateNews('business', event)
+      case '運動': updateNews('sports', event)
         break
-      case '娛樂': updateNews('entertainment', event)
+      case '商業': updateNews('business', event)
         break
       case '健康': updateNews('health', event)
         break
       case '頭條': updateNews('general', event)
         break
-      case '運動': updateNews('sports', event)
+      case '娛樂': updateNews('entertainment', event)
         break
       case '科技': updateNews('technology', event)
         break
