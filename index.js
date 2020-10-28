@@ -145,7 +145,7 @@ bot.on('message', async event => {
           }
         }, {
           type: 'audio',
-          originalContentUrl: 'https://9e9f1be81d29.ngrok.io/text.m4a',
+          originalContentUrl: 'https://askmeaboutexhibition.herokuapp.com/text.m4a',
           duration: 1000
         }]
       // reply = (result.length === 0) ? '嗨嗨' : reply
