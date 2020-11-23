@@ -4,11 +4,7 @@ import linebot from 'linebot'
 import dotenv from 'dotenv'
 import axios from 'axios'
 import cheerio from 'cheerio'
-// import googleTTS from 'google-tts-api'
-// import Gtts from 'gtts'
-// import express from 'express'
-// import ffmpeg from 'fluent-ffmpeg'
-
+import googleTTS from 'google-tts-api'
 // 讀取 .env
 dotenv.config()
 // 設定機器人
@@ -28,6 +24,8 @@ const updateNews = async (catagory, event) => {
     const img1 = articles[0].urlToImage === null ? imgUrl : encodeURI(articles[0].urlToImage)
     const img2 = articles[1].urlToImage === null ? imgUrl : encodeURI(articles[1].urlToImage)
     const img3 = articles[2].urlToImage === null ? imgUrl : encodeURI(articles[2].urlToImage)
+    const img4 = articles[3].urlToImage === null ? imgUrl : encodeURI(articles[3].urlToImage)
+    const img5 = articles[4].urlToImage === null ? imgUrl : encodeURI(articles[4].urlToImage)
     reply = {
       type: 'flex',
       altText: 'Flex',
@@ -217,7 +215,8 @@ const updateNews = async (catagory, event) => {
               ],
               paddingAll: '0px'
             }
-          }, {
+          },
+          {
             type: 'bubble',
             body: {
               type: 'box',
@@ -311,6 +310,196 @@ const updateNews = async (catagory, event) => {
               ],
               paddingAll: '0px'
             }
+          },
+          {
+            type: 'bubble',
+            body: {
+              type: 'box',
+              layout: 'vertical',
+              contents: [
+                {
+                  type: 'image',
+                  url: img4,
+                  size: 'full',
+                  aspectMode: 'cover',
+                  aspectRatio: '2:3',
+                  gravity: 'top'
+                },
+                {
+                  type: 'box',
+                  layout: 'vertical',
+                  contents: [
+                    {
+                      type: 'box',
+                      layout: 'vertical',
+                      contents: [
+                        {
+                          type: 'text',
+                          text: articles[3].title,
+                          wrap: true,
+                          size: 'xl',
+                          color: '#ffffff',
+                          weight: 'bold'
+                        }
+                      ]
+                    },
+                    {
+                      type: 'box',
+                      layout: 'vertical',
+                      contents: [
+                        {
+                          type: 'filler'
+                        },
+                        {
+                          type: 'box',
+                          layout: 'baseline',
+                          contents: [
+                            {
+                              type: 'filler'
+                            },
+                            {
+                              type: 'text',
+                              text: '查看新聞',
+                              color: '#ffffff',
+                              flex: 0,
+                              offsetTop: '-2px',
+                              contents: [
+                                {
+                                  type: 'span',
+                                  text: '查看新聞'
+                                }
+                              ]
+                            },
+                            {
+                              type: 'filler'
+                            }
+                          ],
+                          spacing: 'sm'
+                        },
+                        {
+                          type: 'filler'
+                        }
+                      ],
+                      borderWidth: '1px',
+                      cornerRadius: '4px',
+                      spacing: 'sm',
+                      borderColor: '#ffffff',
+                      margin: 'xxl',
+                      height: '40px',
+                      offsetTop: '20px',
+                      action: {
+                        type: 'uri',
+                        label: 'action',
+                        uri: encodeURI(articles[3].url)
+                      }
+                    }
+                  ],
+                  position: 'absolute',
+                  offsetBottom: '0px',
+                  offsetStart: '0px',
+                  offsetEnd: '0px',
+                  backgroundColor: '#03303Acc',
+                  paddingAll: '40px',
+                  paddingTop: '40px'
+                }
+              ],
+              paddingAll: '0px'
+            }
+          },
+          {
+            type: 'bubble',
+            body: {
+              type: 'box',
+              layout: 'vertical',
+              contents: [
+                {
+                  type: 'image',
+                  url: img5,
+                  size: 'full',
+                  aspectMode: 'cover',
+                  aspectRatio: '2:3',
+                  gravity: 'top'
+                },
+                {
+                  type: 'box',
+                  layout: 'vertical',
+                  contents: [
+                    {
+                      type: 'box',
+                      layout: 'vertical',
+                      contents: [
+                        {
+                          type: 'text',
+                          text: articles[4].title,
+                          wrap: true,
+                          size: 'xl',
+                          color: '#ffffff',
+                          weight: 'bold'
+                        }
+                      ]
+                    },
+                    {
+                      type: 'box',
+                      layout: 'vertical',
+                      contents: [
+                        {
+                          type: 'filler'
+                        },
+                        {
+                          type: 'box',
+                          layout: 'baseline',
+                          contents: [
+                            {
+                              type: 'filler'
+                            },
+                            {
+                              type: 'text',
+                              text: '查看新聞',
+                              color: '#ffffff',
+                              flex: 0,
+                              offsetTop: '-2px',
+                              contents: [
+                                {
+                                  type: 'span',
+                                  text: '查看新聞'
+                                }
+                              ]
+                            },
+                            {
+                              type: 'filler'
+                            }
+                          ],
+                          spacing: 'sm'
+                        },
+                        {
+                          type: 'filler'
+                        }
+                      ],
+                      borderWidth: '1px',
+                      cornerRadius: '4px',
+                      spacing: 'sm',
+                      borderColor: '#ffffff',
+                      margin: 'xxl',
+                      height: '40px',
+                      offsetTop: '20px',
+                      action: {
+                        type: 'uri',
+                        label: 'action',
+                        uri: encodeURI(articles[4].url)
+                      }
+                    }
+                  ],
+                  position: 'absolute',
+                  offsetBottom: '0px',
+                  offsetStart: '0px',
+                  offsetEnd: '0px',
+                  backgroundColor: '#03303Acc',
+                  paddingAll: '40px',
+                  paddingTop: '40px'
+                }
+              ],
+              paddingAll: '0px'
+            }
           }
         ]
       }
@@ -321,28 +510,28 @@ const updateNews = async (catagory, event) => {
   }
 }
 
-const updateData = async (dataUrl, event) => {
-  // const tts = new Gtts(`${text}`, 'th')
-  // tts.save('./sound/text.m4a', function (err, result) {
-  //   if (err) { throw new Error(err) }
-  //   console.log('Success! Open file to hear result.')
-  // })
-  // const app = express()
-  // app.get('./', function (req, res) {
-  //   const gtts = new Gtts(`${text}`, 'th')
-  //   gtts.stream().pipe(res)
-  //   console.log(res)
-  // })
+const updateData = async (dataUrl, text, event) => {
   const encode = encodeURI(dataUrl)
   const response = await axios.get(encode)
   const $ = cheerio.load(response.data)
   let reply
+  let textaudioUrl = ''
   const result = []
-  for (let i = 1; i <= 5; i += 2) {
+  const english = new RegExp('[A-Za-z]+')
+  const translateLanguage = english.test(text) ? 'NECTEC Lexitron Dictionary EN-TH' : 'NECTEC Lexitron-2 Dictionary (TH-EN)'
+  googleTTS(text, 'th', 1)
+    .then((url) => {
+      textaudioUrl = url
+    })
+    .catch((err) => {
+      console.error(err.stack)
+    })
+  for (let i = 1; i <= 9; i += 2) {
     const word = $('b').filter(function (i, el) {
-      return $(el).text() === 'NECTEC Lexitron-2 Dictionary (TH-EN)'
+      return $(el).text() === translateLanguage
     }).next().find('tbody tr td').eq(i).children().remove('a').end().text().split('')
-    const translate = word.length > 0 ? word.slice(0, word.indexOf(',')).join('') : 'no results'
+    const spliceword = word.indexOf(',') === -1 ? word.length : word.indexOf(',')
+    const translate = word.length > 0 ? word.slice(0, spliceword).join('') : 'no results'
     let example = ''
     if (word.lastIndexOf('T') === -1) {
       example = word.length > 0 ? word.slice(word.lastIndexOf('E') + 9).join('') : 'no results'
@@ -351,93 +540,216 @@ const updateData = async (dataUrl, event) => {
     }
     result.push({ translate: translate, example: example })
   }
-  result.length === 0 ? reply = '沒有這個單字的資料，請搜尋其他單詞~'
-    : reply = [{
-      type: 'flex',
-      altText: 'Flex',
-      contents: {
-        type: 'carousel',
-        contents: [
-          {
-            type: 'bubble',
-            header: {
-              type: 'box',
-              layout: 'vertical',
-              contents: [{
-                type: 'text',
-                wrap: true,
-                text: result[0].translate
-              }]
+  const index = result.indexOf(result.find(item => item.translate === 'no results'))
+  if (index === 0) {
+    reply = '沒有這個單字的資料，請搜尋其他單詞~'
+  } else if (english.test(text)) {
+    reply = [
+      {
+        type: 'flex',
+        altText: 'Flex',
+        contents: {
+          type: 'carousel',
+          contents: [
+            {
+              type: 'bubble',
+              body: {
+                type: 'box',
+                layout: 'vertical',
+                contents: [{
+                  type: 'text',
+                  text: result[0].translate
+                }],
+                justifyContent: 'center',
+                alignItems: 'center'
+              }
             },
-            body: {
-              type: 'box',
-              layout: 'vertical',
-              contents: [{
-                type: 'text',
-                wrap: true,
-                text: result[0].example
-              }]
+            {
+              type: 'bubble',
+              body: {
+                type: 'box',
+                layout: 'vertical',
+                contents: [{
+                  type: 'text',
+                  wrap: true,
+                  text: result[1].translate
+                }],
+                justifyContent: 'center',
+                alignItems: 'center'
+              }
             },
-            styles: {
-              header: {
-                backgroundColor: '#83c5be'
+            {
+              type: 'bubble',
+              body: {
+                type: 'box',
+                layout: 'vertical',
+                contents: [{
+                  type: 'text',
+                  wrap: true,
+                  text: result[2].translate
+                }],
+                justifyContent: 'center',
+                alignItems: 'center'
+              }
+            },
+            {
+              type: 'bubble',
+              body: {
+                type: 'box',
+                layout: 'vertical',
+                contents: [{
+                  type: 'text',
+                  wrap: true,
+                  text: result[3].translate
+                }],
+                justifyContent: 'center',
+                alignItems: 'center'
+              }
+            },
+            {
+              type: 'bubble',
+              body: {
+                type: 'box',
+                layout: 'vertical',
+                contents: [{
+                  type: 'text',
+                  wrap: true,
+                  text: result[4].translate
+                }],
+                justifyContent: 'center',
+                alignItems: 'center'
               }
             }
-          },
-          {
-            type: 'bubble',
-            header: {
-              type: 'box',
-              layout: 'vertical',
-              contents: [{
-                type: 'text',
-                wrap: true,
-                text: result[1].translate
-              }]
-            },
-            body: {
-              type: 'box',
-              layout: 'vertical',
-              contents: [{
-                type: 'text',
-                wrap: true,
-                text: result[1].example
-              }]
-            },
-            styles: {
-              header: {
-                backgroundColor: '#83c5be'
-              }
-            }
-          }, {
-            type: 'bubble',
-            header: {
-              type: 'box',
-              layout: 'vertical',
-              contents: [{
-                type: 'text',
-                wrap: true,
-                text: result[2].translate
-              }]
-            },
-            body: {
-              type: 'box',
-              layout: 'vertical',
-              contents: [{
-                type: 'text',
-                wrap: true,
-                text: result[2].example
-              }]
-            },
-            styles: {
-              header: {
-                backgroundColor: '#83c5be'
-              }
-            }
-          }
-        ]
+          ]
+        }
       }
-    }]
+    ]
+    if (index !== -1) reply[0].contents.contents.splice(index)
+  } else {
+    reply = [
+      {
+        type: 'flex',
+        altText: 'Flex',
+        contents: {
+          type: 'carousel',
+          contents: [
+            {
+              type: 'bubble',
+              header: {
+                type: 'box',
+                layout: 'vertical',
+                contents: [{
+                  type: 'text',
+                  wrap: true,
+                  text: result[0].translate
+                }]
+              },
+              body: {
+                type: 'box',
+                layout: 'vertical',
+                contents: [{
+                  type: 'text',
+                  wrap: true,
+                  text: result[0].example
+                }]
+              },
+              styles: {
+                header: {
+                  backgroundColor: '#83c5be'
+                }
+              }
+            },
+            {
+              type: 'bubble',
+              header: {
+                type: 'box',
+                layout: 'vertical',
+                contents: [{
+                  type: 'text',
+                  wrap: true,
+                  text: result[1].translate
+                }]
+              },
+              body: {
+                type: 'box',
+                layout: 'vertical',
+                contents: [{
+                  type: 'text',
+                  wrap: true,
+                  text: result[1].example
+                }]
+              },
+              styles: {
+                header: {
+                  backgroundColor: '#83c5be'
+                }
+              }
+            },
+            {
+              type: 'bubble',
+              header: {
+                type: 'box',
+                layout: 'vertical',
+                contents: [{
+                  type: 'text',
+                  wrap: true,
+                  text: result[2].translate
+                }]
+              },
+              body: {
+                type: 'box',
+                layout: 'vertical',
+                contents: [{
+                  type: 'text',
+                  wrap: true,
+                  text: result[2].example
+                }]
+              },
+              styles: {
+                header: {
+                  backgroundColor: '#83c5be'
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        type: 'flex',
+        altText: 'Flex',
+        contents: {
+          type: 'carousel',
+          contents: [{
+            type: 'bubble',
+            body: {
+              type: 'box',
+              layout: 'vertical',
+              contents: [{
+                type: 'text',
+                text: '點我聽發音'
+              }],
+              action: {
+                type: 'uri',
+                label: 'action',
+                uri: textaudioUrl
+              },
+              justifyContent: 'center',
+              alignItems: 'center',
+              cornerRadius: 'xs'
+            },
+            styles: {
+              header: {
+                separator: false,
+                backgroundColor: '#000000'
+              }
+            }
+          }]
+        }
+      }
+    ]
+    if (index !== -1) reply[0].contents.contents.splice(index)
+    if (!textaudioUrl) reply.splice(1, 1)
+  }
   event.reply(reply)
 }
 bot.on('message', async event => {
@@ -462,7 +774,7 @@ bot.on('message', async event => {
         break
       case '科技': updateNews('technology', event)
         break
-      default: updateData(url, event)
+      default: updateData(url, text, event)
         break
     }
   } catch (error) {
