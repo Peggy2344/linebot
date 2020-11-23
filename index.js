@@ -519,7 +519,7 @@ const updateData = async (dataUrl, text, event) => {
   const result = []
   const english = new RegExp('[A-Za-z]+')
   const translateLanguage = english.test(text) ? 'NECTEC Lexitron Dictionary EN-TH' : 'NECTEC Lexitron-2 Dictionary (TH-EN)'
-  googleTTS(text, 'th', 1)
+  await googleTTS(text, 'th', 1)
     .then((url) => {
       textaudioUrl = url
     })
